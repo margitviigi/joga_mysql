@@ -1,10 +1,19 @@
-const app = require('./utils/app')
-const db = require('./utils/db')
-const articleRoutes = require('./routes/articles')
+// Load environment variables FIRST before importing anything else
+require('dotenv').config();
 
-app.use('/', articleRoutes)
-app.use('/article', articleRoutes)
+const express = require('express');
 
-app.listen(3012, () => {
-    console.log('Web server is connected.')
-} )
+const app = express();
+
+// Middleware
+app.use(express.json());
+
+// Import routes
+const articleRoutes = require('./routes/article');
+app.use('/', articleRoutes);
+
+// Start the server
+const PORT = process.env.PORT || 3025;
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+});

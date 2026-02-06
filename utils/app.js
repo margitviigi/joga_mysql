@@ -1,18 +1,35 @@
 const express = require('express')
-const path = require ('path')
-const hbs = require ('express-handlebars')
+const articleRoutes = require('../routes/article')
 
-const app = express()
+class App {
+    constructor(port) {
+        this.port = port
+        this.app = express()
+        this.initMiddleware()
+        this.initRoutes()
+        this.start()
+        this.bindMethods()
+    }
 
-app.set('views', path.join(__dirname, '/../views'))
-app.set('view engine', 'hbs')
-app.engine('hbs', hbs.engine ({
-    extname:'hbs',
-    defaultLayout: 'main',
-    layoutsDir:path.join(__dirname, '/../views/layouts/')
-} ) )
+    bindMethods() {
+        this.initMiddleware = this.initMiddleware.bind(this)
+        this.initRoutes = this.initRoutes.bind(this)
+        this.start = this.start.bind(this)
+    }
 
-app.use(express.static('public'))
-app.use(express.urlencoded ({extended:true} ))
+    initMiddleware() {
+        this.app.use(express.json())
+    }
 
-module.exports = app
+    initRoutes() {
+        this.app.use('/', articleRoutes)
+    }
+
+    start() {
+        this.app.listen(this.port, () => {
+            console.log(`App listening on port ${this.port}`)
+        })
+    }
+}
+
+module.exports = App
