@@ -1,10 +1,12 @@
-<h1>Homepage</h1>
+<h1>Articles</h1>
 
-<div class="article-list">
+<div class="articles-list">
     {{#articles}}
-    <article>
-        <a href="/articles/{{slug}}"><img src="/images/{{image}}" alt="{{this.title}}"></a>
-            <h2><a href="/articles/{{slug}}">{{name}}</a></h2>
-        </div></article>
+    <article class="article-card">
+        <img src="/images/{{image}}" alt="{{name}}">
+        <h2>{{name}}</h2>
+        <p>{{body}}</p>
+        <a href="/article/{{slug}}" class="read-more">Read More</a>
+    </article>
     {{/articles}}
 </div>

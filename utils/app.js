@@ -39,6 +39,25 @@ class App {
         this.app.get('/login', (req, res) => {
             res.render('login')
         })
+        this.app.get('/article/:slug', (req, res) => {
+            let query = `SELECT * FROM articles WHERE slug = '${req.params.slug}'`
+            let article
+            con.query(query, (err, results) => {
+                if (err) {
+                    res.status(500).render('error', { error: err.message })
+                } else if (results.length > 0) {
+                    article = results[0]
+                    res.render('article', { article: article })
+                } else {
+                    res.status(404).render('error', { error: 'Article not found' })
+                }
+            })
+        })
+
+        this.app.get('/articles/:slug', (req, res) => {
+            res.render('article', { slug: req.params.slug })
+        })
+
     }
 
     start() {
