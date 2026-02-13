@@ -36,8 +36,8 @@ class BaseSQLModel {
   }
 
   async findById(id) {
-    const query = `SELECT * FROM ${this.tableName} WHERE id = ?`;
-    const results = await this.executeQuery(query, [id]);
+    const query = `SELECT * FROM ${this.tableName} WHERE id = ${value}`;
+    const results = await this.executeQuery(query, [where, value] );
     return results[0];
   }
 

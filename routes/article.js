@@ -1,5 +1,11 @@
 const express = require('express');
+const router = express.Router();
 const ArticleController = require('../controllers/article');
+
+router.get('/',(req, res) => ArticleController.getAllArticles(req, res));
+router.get('/article/:slug', (req, res) => ArticleController.getArticleBySlug(req, res));
+router.post('/article/create', (req, res) => ArticleController.createNewArticle(req, res));
+router.get('/author/:authorId', (req, res) => ArticleController.getArticlesByAuthor(req, res));
 
 class ArticleRouter {
     constructor() {
@@ -10,9 +16,10 @@ class ArticleRouter {
     }
 
     initRoutes() {
-        this.router.get('/', this.controller.getAllArticles);
+        this.router.get('/author/:authorId', (req, res) => this.controller.getArticlesByAuthor(req, res));
         this.router.get('/article/:slug', this.controller.getArticleBySlug);
-        this.router.post('/article/create', this.controller.createArticle);
+        this.router.post('/article', this.controller.createArticle);
+        this.router.get('/', this.controller.getAllArticles);
     }
 
     getRouter() {
