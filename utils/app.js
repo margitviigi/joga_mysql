@@ -33,6 +33,12 @@ class App {
     initRoutes() {
         this.app.use('/', articleRoutes)
         this.app.use('/', userRoutes)
+        this.app.get('/register', (req, res) => {
+            res.render('register')
+        })
+        this.app.get('/login', (req, res) => {
+            res.render('login')
+        })
     }
 
     start() {

@@ -8,10 +8,27 @@ class UserController {
                 return res.status(400).json({ error: 'Missing required fields: username, email, password' });
             }
             
-            const cryptPassword = await bcrypt.hash(req.body.password, 10)
+            const { username, email, password } = req.body;
+            
+            if (password.length < 8) {
+                return res.status(400).json({ error: 'Password must be at least 8 characters long' });
+            }
+            if (!/[A-Z]/.test(password)) {
+                return res.status(400).json({ error: 'Password must contain at least one capital letter' });
+            }
+            if (!/[0-9]/.test(password)) {
+                return res.status(400).json({ error: 'Password must contain at least one number' });
+            }
+            
+            const existingUser = await UserModel.findByUsername(username);
+            if (existingUser) {
+                return res.status(400).json({ error: 'Username already exists' });
+            }
+            
+            const cryptPassword = await bcrypt.hash(password, 10)
             const registeredId = await UserModel.create({
-                username: req.body.username,
-                email: req.body.email,
+                username: username,
+                email: email,
                 password: cryptPassword
             })
             if (registeredId) {
