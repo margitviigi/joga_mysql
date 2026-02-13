@@ -4,15 +4,21 @@ class ArticleModel extends BaseSQLModel {
   constructor() {
     super('article');
   }
-
   async findOne(slug) {
-    return await super.findOne('slug', slug);
+    const article = await super.findOne('slug', slug);
+    return article;
   }
-
+  async findByAuthorId(authorId) {
+    return await super.findMany('author_id', authorId);
+  }
   async findMany(author) {
-    return await super.findMany('author_id', author.id);
+    const articles = await super.findMany('author_id', author.id);
+    return articles;
   }
-  
+  async create(article) {
+    const createdArticleId = await super.create(article);
+    return createdArticleId;
+  }
 }
- 
+
 module.exports = new ArticleModel();
