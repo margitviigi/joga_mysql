@@ -1,13 +1,13 @@
-const connection = require('../utils/db');
+const conn = require('../utils/db');
 
 class BaseSQLModel {
   constructor(tableName) {
     this.tableName = tableName;
   }
 
-  executeQuery(query, params = []) {
+  executeQuery(query, params) {
     return new Promise((resolve, reject) => {
-      connection.query(query, params, (error, results) => {
+      conn.query(query, params, (error, results) => {
         if (error) {
           reject(error);
         } else {
@@ -23,6 +23,18 @@ class BaseSQLModel {
     return results;
   }
 
+  async findOne(where, value) {
+    const query = `SELECT * FROM ${this.tableName} WHERE ${where}="${value}"`;
+    const results = await this.executeQuery(query, [where, value]);
+    return results[0];
+  }
+
+    async findMany(where, value) {
+    const query = `SELECT * FROM ${this.tableName} WHERE ${where}="${value}"`;
+    const results = await this.executeQuery(query, [where, value]);
+    return results;
+  }
+
   async findById(id) {
     const query = `SELECT * FROM ${this.tableName} WHERE id = ?`;
     const results = await this.executeQuery(query, [id]);
@@ -31,7 +43,7 @@ class BaseSQLModel {
 
   async create(data) {
     const query = `INSERT INTO ${this.tableName} SET ?`;
-    const result = await this.executeQuery(query, [data]);
+    const result = await this.executeQuery(query, data);
     return result.insertId;
   }
 

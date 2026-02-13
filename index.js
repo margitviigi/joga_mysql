@@ -1,19 +1,4 @@
-// Load environment variables FIRST before importing anything else
+// Ensure environment variables are loaded before other modules
 require('dotenv').config();
-
-const express = require('express');
-
-const app = express();
-
-// Middleware
-app.use(express.json());
-
-// Import routes
-const articleRoutes = require('./routes/article');
-app.use('/', articleRoutes);
-
-// Start the server
-const PORT = process.env.PORT || 3025;
-app.listen(PORT, () => {
-    console.log(`Server is running on port ${PORT}`);
-});
+const App = require('./utils/app')
+const app = new App(3025)
