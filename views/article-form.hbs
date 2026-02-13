@@ -1,0 +1,27 @@
+<div class="article-form">
+    <h1>{{#if article}}Edit Article{{else}}Create New Article{{/if}}</h1>
+    <form method="POST" action="{{#if article}}/article/edit/{{article.id}}{{else}}/article/create{{/if}}">
+        <div class="form-group">
+            <label for="name">Article Title:</label>
+            <input type="text" id="name" name="name" value="{{article.name}}" required>
+        </div>
+        <div class="form-group">
+            <label for="slug">Slug:</label>
+            <input type="text" id="slug" name="slug" value="{{article.slug}}" required>
+        </div>
+        <div class="form-group">
+            <label for="image">Image Filename:</label>
+            <input type="text" id="image" name="image" value="{{article.image}}" placeholder="e.g., article.jpg">
+        </div>
+        <div class="form-group">
+            <label for="body">Content:</label>
+            <textarea id="body" name="body" rows="10" required>{{{article.body}}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="author_id">Author ID:</label>
+            <input type="number" id="author_id" name="author_id" value="{{article.author_id}}" required>
+        </div>
+        <button type="submit" class="btn">{{#if article}}Update{{else}}Create{{/if}} Article</button>
+        <a href="/" class="btn btn-secondary">Cancel</a>
+    </form>
+</div>

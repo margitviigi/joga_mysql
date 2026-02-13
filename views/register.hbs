@@ -1,0 +1,20 @@
+<div class="auth-form">
+    <h1>Register</h1>
+    <form method="POST" action="/users/register">
+        <div class="form-group">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" required>
+        </div>
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+            <small>Must be at least 8 characters, contain 1 uppercase letter and 1 number</small>
+        </div>
+        <button type="submit" class="btn">Register</button>
+        <p>Already have an account? <a href="/login">Login here</a></p>
+    </form>
+</div>

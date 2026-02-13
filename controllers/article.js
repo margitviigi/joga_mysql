@@ -10,6 +10,9 @@ class ArticleController {
         this.updateArticle = this.updateArticle.bind(this);
         this.deleteArticle = this.deleteArticle.bind(this);
         this.getArticlesByAuthor = this.getArticlesByAuthor.bind(this);
+        this.showCreateForm = this.showCreateForm.bind(this);
+        this.showEditForm = this.showEditForm.bind(this);
+        this.showDeleteForm = this.showDeleteForm.bind(this);
     }
 
     async getAllArticles(req, res) {
@@ -64,12 +67,12 @@ class ArticleController {
             }
             const affectedRows = await this.model.update(articleId, updatedData);
             if (affectedRows > 0) {
-                res.status(200).json({ message: `Article with id ${articleId} updated successfully` });
+                res.redirect('/');
             } else {
-                res.status(404).json({ error: 'Article not found' });
+                res.status(404).render('error', { error: 'Article not found' });
             }
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).render('error', { error: error.message });
         }
     }
 
@@ -78,12 +81,12 @@ class ArticleController {
             const articleId = req.params.id;
             const affectedRows = await this.model.delete(articleId);
             if (affectedRows > 0) {
-                res.status(200).json({ message: `Article with id ${articleId} deleted successfully` });
+                res.redirect('/');
             } else {
-                res.status(404).json({ error: 'Article not found' });
+                res.status(404).render('error', { error: 'Article not found' });
             }
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).render('error', { error: error.message });
         }
     }
 
@@ -107,12 +110,39 @@ class ArticleController {
                 author_id: req.body.author_id
             }
             const articleId = await this.model.create(newArticle)
-            res.status(201).json({ 
-                message: `created new article with id ${articleId}`,
-                article: { id: articleId, ...newArticle }
-            });
+            res.redirect('/');
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).render('error', { error: error.message });
+        }
+    }
+
+    showCreateForm(req, res) {
+        res.render('article-form');
+    }
+
+    async showEditForm(req, res) {
+        try {
+            const article = await this.model.findById(req.params.id);
+            if (article) {
+                res.render('article-form', { article: article });
+            } else {
+                res.status(404).render('error', { error: 'Article not found' });
+            }
+        } catch (error) {
+            res.status(500).render('error', { error: error.message });
+        }
+    }
+
+    async showDeleteForm(req, res) {
+        try {
+            const article = await this.model.findById(req.params.id);
+            if (article) {
+                res.render('article-delete', { article: article });
+            } else {
+                res.status(404).render('error', { error: 'Article not found' });
+            }
+        } catch (error) {
+            res.status(500).render('error', { error: error.message });
         }
     }
 
