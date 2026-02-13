@@ -22,6 +22,10 @@ class UserModel extends BaseSQLModel {
     const createdUserId = await super.create(user);
     return createdUserId;
   }
+
+  async updateRole(userId, role) {
+    return await super.update(userId, { role: role });
+  }
 }
 
 module.exports = new UserModel();
