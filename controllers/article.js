@@ -8,6 +8,7 @@ class ArticleController {
         this.getArticleBySlug = this.getArticleBySlug.bind(this);
         this.createNewArticle = this.createNewArticle.bind(this);
         this.updateArticle = this.updateArticle.bind(this);
+        this.deleteArticle = this.deleteArticle.bind(this);
         this.getArticlesByAuthor = this.getArticlesByAuthor.bind(this);
     }
 
@@ -64,6 +65,20 @@ class ArticleController {
             const affectedRows = await this.model.update(articleId, updatedData);
             if (affectedRows > 0) {
                 res.status(200).json({ message: `Article with id ${articleId} updated successfully` });
+            } else {
+                res.status(404).json({ error: 'Article not found' });
+            }
+        } catch (error) {
+            res.status(500).json({ error: error.message });
+        }
+    }
+
+    async deleteArticle(req, res) {
+        try {
+            const articleId = req.params.id;
+            const affectedRows = await this.model.delete(articleId);
+            if (affectedRows > 0) {
+                res.status(200).json({ message: `Article with id ${articleId} deleted successfully` });
             } else {
                 res.status(404).json({ error: 'Article not found' });
             }
