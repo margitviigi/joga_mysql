@@ -46,6 +46,38 @@ class UserController {
             res.status(500).json({ error: error.message })
         }
     }
+
+    async login(req, res) {
+        try {
+            if (!req.body || !req.body.username || !req.body.password) {
+                return res.status(400).json({ error: 'Missing required fields: username, password' });
+            }
+
+            const { username, password } = req.body;
+
+            const user = await UserModel.findByUsername(username);
+            if (!user) {
+                return res.status(401).json({ error: 'User not found' });
+            }
+
+            const passwordMatch = await bcrypt.compare(password, user.password);
+            if (!passwordMatch) {
+                return res.status(401).json({ error: 'Invalid password' });
+            }
+
+            req.session.user = {
+                username: user.username,
+                user_id: user.id
+            };
+
+            res.json({
+                message: 'User logged in successfully',
+                user_session: req.session.user
+            });
+        } catch (error) {
+            res.status(500).json({ error: error.message })
+        }
+    }
 }
 
-module.exports = new UserController()
+module.exports = new UserController();
