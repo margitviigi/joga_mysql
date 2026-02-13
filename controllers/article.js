@@ -15,9 +15,9 @@ class ArticleController {
     async getAllArticles(req, res) {
         try {
             const articles = await this.model.findAll();
-            res.status(201).json({articles: articles});
+            res.render('index', { articles: articles });
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).render('error', { error: error.message });
         }
     }
 
@@ -25,12 +25,12 @@ class ArticleController {
         try {
             const article = await this.model.findOne(req.params.slug);
             if (article) {
-                res.status(201).json({ article: article });
+                res.render('article', { article: article });
             } else {
-                res.status(404).json({ error: 'Article not found' });
+                res.status(404).render('error', { error: 'Article not found' });
             }
         } catch (error) {
-            res.status(500).json({ error: error.message });
+            res.status(500).render('error', { error: error.message });
         }
     }
 
