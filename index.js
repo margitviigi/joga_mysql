@@ -9,6 +9,7 @@ app.engine('hbs', hbs({
     defaultLayout: 'main',
     layoutsDir: path.join(__dirname, 'views/layouts')
 }));
+app.use(express.static('public'));
 
 
 const App = require('./utils/app')
