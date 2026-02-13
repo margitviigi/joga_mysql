@@ -1,5 +1,7 @@
 const express = require('express')
+const sessions = require('express-session')
 const articleRoutes = require('../routes/article')
+const userRoutes = require('../routes/users')
 
 class App {
     constructor(port) {
@@ -18,12 +20,19 @@ class App {
     }
 
     initMiddleware() {
+        this.app.use(sessions({
+            secret: 'your_secret_key',
+            resave: false,
+            saveUninitialized: true,
+            cookie: { maxAge: 24 * 60 * 60 * 1000 }
+        }))
         this.app.use(express.json())
         this.app.use(express.urlencoded({ extended: true }))
     }
 
     initRoutes() {
         this.app.use('/', articleRoutes)
+        this.app.use('/', userRoutes)
     }
 
     start() {
@@ -31,6 +40,7 @@ class App {
             console.log(`App listening on port ${this.port}`)
         })
     }
+
 }
 
 module.exports = App
